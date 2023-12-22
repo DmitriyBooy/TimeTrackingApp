@@ -1,0 +1,16 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+
+  .dropdown {
+    cursor: pointer;
+    position: absolute;
+    border: 1px solid var(--theme-border-color);
+    border-radius: 2px;
+    background: var(--theme-secondary-bgc);
+  }
+}

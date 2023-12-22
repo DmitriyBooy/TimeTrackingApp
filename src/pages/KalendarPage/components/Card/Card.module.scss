@@ -1,0 +1,26 @@
+.card {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    cursor: pointer;
+    background: var(--theme-secondary-bgc);
+    border-radius: 8px;
+    transition: 0.2s;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &_info {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &:hover {
+        box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+    }
+}

@@ -1,0 +1,17 @@
+.input {
+  font-size: 14px;
+  color: var(--theme-text-color);
+  background: rgba(var(--theme-secondary-bgc), 0.5);
+  padding: 4px;
+  border: 1px solid transparent;
+
+  &:focus {
+     outline: none;
+     border-radius: 4px;
+     border: 1px solid var(--theme-border-color-revert);
+  }
+
+  &::-webkit-calendar-picker-indicator {
+    filter: var(--theme-input-icon-color);
+  }
+}

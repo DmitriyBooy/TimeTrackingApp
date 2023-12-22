@@ -1,0 +1,33 @@
+.button {
+  position: relative;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+  overflow: hidden;
+  background-color: var(--theme-secondary-bgc);
+  transition: 0.3s;
+
+  .prevContent {
+    position: absolute;
+    transform: translateX(-300%);
+    color: var(--theme-text-color-revert);
+    transition: 0.3s;
+  }
+
+  .content {
+    transition: 0.3s;
+    color: var(--theme-text-color);
+  }
+
+  &:hover {
+    background: var(--theme-secondary-bgc-revert);
+
+    .prevContent {
+      transform: translateX(0);
+    }
+
+    .content {
+      transform: translateX(300%);
+    }
+  }
+}

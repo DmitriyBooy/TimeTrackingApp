@@ -1,0 +1,12 @@
+.container {
+  padding: 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .rowsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
