@@ -1,0 +1,12 @@
+version: "3.3"
+services:
+  main_redis_db:
+    container_name: redis
+    image: "redis:alpine"
+    restart: on-failure
+    ports:
+      - 127.0.0.1:6379:6379
+    command: redis-server --include /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis_data:/data
