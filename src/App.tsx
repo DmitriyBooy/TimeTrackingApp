@@ -3,10 +3,24 @@ import {useEffect, useState} from "react";
 import RootTheme from './styles/Theme'
 
 import styles from './App.module.scss'
-import AnimatedRoutes from "./components/AnimatedRoutes";
+import {useLocation, useOutlet} from "react-router-dom";
 
 const App = () => {
     const [theme, setTheme] = useState<'light' | 'dark'>('light')
+
+    const Outlet = useOutlet()
+    const [currentOutlet, setCurrentOutlet] = useState(Outlet)
+
+    const location = useLocation()
+    const [displayLocation, setDisplayLocation] = useState(location);
+
+    const [transitionStage, setTransitionStage] = useState(false)
+
+    useEffect(() => {
+        if (location !== displayLocation) {
+            setTransitionStage(true)
+        }
+    }, [location]);
 
     useEffect(() => {
         const isDarkTheme = window?.matchMedia('(prefers-color-scheme: dark)').matches
@@ -34,6 +48,14 @@ const App = () => {
         }
     }
 
+    const onAnimationEnd = () => {
+        if (transitionStage) {
+            setTransitionStage(false);
+            setDisplayLocation(location);
+            setCurrentOutlet(Outlet)
+        }
+    }
+
     return (
         <div className={styles.container}>
             <button
@@ -43,7 +65,12 @@ const App = () => {
                 { theme }
             </button>
 
-            <AnimatedRoutes />
+            <div
+                className={`${transitionStage ? styles.fadeOut : styles.fadeIn}`}
+                onAnimationEnd={onAnimationEnd}
+            >
+                {currentOutlet}
+            </div>
         </div>
     )
 }

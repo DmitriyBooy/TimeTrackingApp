@@ -1,5 +1,4 @@
-import {Route, Routes, useNavigate, useParams} from 'react-router-dom'
-import TaskPage from 'pages/TaskPage'
+import {Outlet, useNavigate, useParams} from 'react-router-dom'
 import Button from "../../components/Button";
 import styles from './TaskLayout.module.scss'
 import {useSelector} from "react-redux";
@@ -53,12 +52,7 @@ const TaskLayout = () => {
                 </span>
             </div>
 
-            <Routes>
-                <Route
-                    path=""
-                    Component={TaskPage}
-                />
-            </Routes>
+            <Outlet />
         </div>
     )
 }
