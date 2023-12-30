@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import fastify from 'fastify'
 import { redis } from './db/redis'
 import {getCalendar, setCalendar} from './functions/CalendarFunctions'

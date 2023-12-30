@@ -1,5 +1,6 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
+const NodemonPlugin = require('nodemon-webpack-plugin')
 
 module.exports = {
   entry: './src/server.ts',
@@ -22,7 +23,15 @@ module.exports = {
   },
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin()],
+    minimizer: [
+      new TerserPlugin(),
+      new NodemonPlugin({
+        script: './dist/server.js',
+        watch: path.resolve('./dist'),
+        delay: '500',
+        verbose: true
+      })
+    ],
   },
   target: 'node',
   watch: true,
