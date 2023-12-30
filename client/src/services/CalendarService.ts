@@ -1,10 +1,10 @@
-import {KalendarDataItem} from "../types/KalendarTypes";
+import { CalendarDataItem } from "types/CalendarTypes";
 import moment from "moment";
 import {TaskType} from "../types/TaskTypes";
 import {TaskService} from "./TaskService";
 
 export default class CalendarService {
-    static getData(): KalendarDataItem[] {
+    static getData(): CalendarDataItem[] {
         const data = localStorage.getItem('calendar-data')
 
         if (data) {
@@ -14,11 +14,11 @@ export default class CalendarService {
         return []
     }
 
-    static addTask(): KalendarDataItem {
+    static addTask(): CalendarDataItem {
         const id = new Date().getTime()
         const date = moment().format('yyyy-MM-DD')
 
-        const newKalendarTask: KalendarDataItem = {
+        const newKalendarTask: CalendarDataItem = {
             id,
             rowsCount: 0,
             time: '',
