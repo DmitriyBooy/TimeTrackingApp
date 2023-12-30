@@ -3,13 +3,13 @@ import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from '../../store'
 
 import { addCard, setData } from './CalendarPageSlice'
-import CalendarService from "../../services/CalendarService";
+import CalendarService from "services/CalendarService";
 import { useEffect } from "react";
 
 
 import Button from 'components/Button'
 
-import styles from './KalendarPage.module.scss'
+import styles from './CalendarPage.module.scss'
 
 const CalendarPage = () => {
     const data = useSelector((state: RootState) => state.calendar.data)
