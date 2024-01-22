@@ -19,8 +19,8 @@ const TaskPage = () => {
 
     const { id, date, rows, totalTime } = task
 
-    const onRowAdd = () => {
-        const newRow = TaskService.addRow(id)
+    const onRowAdd = async () => {
+        const newRow = await TaskService.addRow(id)
 
         if (newRow) {
             dispatch(addRow(newRow))

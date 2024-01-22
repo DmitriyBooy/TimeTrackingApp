@@ -16,8 +16,8 @@ type OnUpdateHandler = (key: keyof RowPayload) => (value: string) => void
 const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
     const dispatch = useAppDispatch()
 
-    const onUpdateHandler: OnUpdateHandler = (key) => (value) => {
-        const updatedRow = TaskService.updateTaskRow({
+    const onUpdateHandler: OnUpdateHandler = (key) => async (value) => {
+        const updatedRow = await TaskService.updateTaskRow({
             rowId: id,
             changes: {[key]: value},
         }, taskId)
@@ -27,8 +27,8 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
         }
     }
 
-    const onDeleteRow = () => {
-        const targetId = TaskService.deleteRow(id, taskId)
+    const onDeleteRow = async () => {
+        const targetId = await TaskService.deleteRow(id, taskId)
 
         if (targetId) {
             dispatch(deleteRow(targetId))

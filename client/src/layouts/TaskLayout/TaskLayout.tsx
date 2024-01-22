@@ -19,7 +19,9 @@ const TaskLayout = () => {
 
     useEffect(() => {
         if (taskId) {
-            dispatch(setData(TaskService.getTask(+taskId) || null))
+            TaskService.getTask(+taskId).then((task) => {
+                dispatch(setData(task))
+            })
         }
     }, [taskId])
 

@@ -1,5 +1,6 @@
 import {RowType, TaskType} from '../types/TaskTypes'
 import {UpdateTaskPayload} from "../pages/TaskPage/TaskPageTypes";
+import axios from "axios";
 
 export class TaskService {
     static getTasksData(): TaskType[] {
@@ -12,76 +13,27 @@ export class TaskService {
         return []
     }
 
-    static getTask(targetId: number): TaskType | undefined {
-        const rawData = localStorage.getItem('task-data')
+    static async getTask(id: number): Promise<TaskType | any> {
+        const { data } = await axios.get(`${process.env.REACT_APP_MAIN_URL}/task/${id}`)
 
-        if (rawData) {
-            const data = JSON.parse(rawData) as TaskType[]
-
-            return data.find(({ id }) => id === targetId)
-        }
-
-        return
+        return data
     }
 
-    static addRow(taskId: number): void | RowType {
-        const newRow: RowType = {
-            id: new Date().getTime(),
-            from: null,
-            to: null,
-            title: '',
-            taskId,
-        }
+    static async addRow(id: number): Promise<void | RowType> {
+        const { data } = await axios.post(`${process.env.REACT_APP_MAIN_URL}/task/${id}/rows`, { id })
 
-        const data = this.getTasksData()
-
-        const targetTask = data.find(({ id }) => id === taskId)
-
-        if (targetTask) {
-            targetTask.rows.push(newRow)
-
-            localStorage.setItem('task-data', JSON.stringify(data))
-
-            return newRow
-        }
+        return data
     }
 
-    static updateTaskRow({ changes, rowId }: UpdateTaskPayload, taskId: number): RowType | void {
-        const data = this.getTasksData()
+    static async updateTaskRow({ changes, rowId }: UpdateTaskPayload, taskId: number): Promise<RowType | void> {
+        const { data } = await axios.put(`${process.env.REACT_APP_MAIN_URL}/task/${taskId}/rows/${rowId}`, changes)
 
-        const targetTask = data.find(({ id }) => id === taskId)
-
-        if (targetTask) {
-            let targetRowIndex = targetTask.rows.findIndex(({ id }) => id === rowId)
-
-            if (targetRowIndex !== -1) {
-                targetTask.rows.splice(targetRowIndex, 1, {
-                    ...targetTask.rows[targetRowIndex],
-                    ...changes,
-                })
-
-                localStorage.setItem('task-data', JSON.stringify(data))
-
-                return targetTask.rows[targetRowIndex]
-            }
-        }
+        return data
     }
 
-    static deleteRow(targetId: number, taskId: number): number | void {
-        const data = this.getTasksData()
+    static async deleteRow(id: number, taskId: number): Promise<number | void> {
+        const { data } = await axios.delete(`${process.env.REACT_APP_MAIN_URL}/task/${taskId}/rows`, { data: { id } })
 
-        const targetTask = data.find(({ id }) => id === taskId)
-
-        if (targetTask) {
-            let targetRowIndex = targetTask.rows.findIndex(({ id }) => id === targetId)
-
-            if (targetRowIndex !== -1) {
-                targetTask.rows.splice(targetRowIndex, 1)
-
-                localStorage.setItem('task-data', JSON.stringify(data))
-
-                return targetId
-            }
-        }
+        return data
     }
 }
