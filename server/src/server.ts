@@ -1,18 +1,53 @@
 import 'dotenv/config'
-import fastify from 'fastify'
+import fastify, { FastifyRequest } from 'fastify'
+import cors from '@fastify/cors'
 import { redis } from './db/redis'
-import {getCalendar, setCalendar} from './functions/CalendarFunctions'
+import { deleteCalendarItem, getCalendar, setCalendarItem } from './functions/CalendarFunctions'
+import { getTask, addRow, deleteRow, updateRow } from './functions/TasksFynctions'
 
-const server = fastify({ logger: true })
+import { TaskRowChangesPayload } from './models/TaskRow'
+import {getTempnames} from "./functions/TempnamesFynctions";
 
-server.get('/calendar', async (request, reply) => {
-    return await getCalendar(redis)
+const server = fastify({
+    logger: true,
 })
 
-server.post('/calendar', async (request, reply) => {
-    setCalendar(redis)
+const start = async () => {
+    await server.register(cors)
 
-    return { asd: 'asd' }
-})
+    server.get('/calendar', async () => {
+        return await getCalendar(redis)
+    })
 
-server.listen({ port: 3000 })
+    server.post('/calendar', async () => {
+        return setCalendarItem(redis)
+    })
+
+    server.delete('/calendar', async ({ body }: FastifyRequest<{ Body: { id: number } }>) => {
+        return await deleteCalendarItem(redis, body)
+    })
+
+    server.get('/task/:taskId', async ({ params: { taskId } }: FastifyRequest<{ Params: { taskId: string } }>) => {
+        return await getTask(redis, taskId)
+    })
+
+    server.post('/task/:taskId/rows', async ({ params: { taskId } }: FastifyRequest<{ Params: { taskId: string } }>) => {
+        return await addRow(redis, Number(taskId))
+    })
+
+    server.delete('/task/:taskId/rows', async ({ params: { taskId }, body: { id } }: FastifyRequest<{ Params: { taskId: string }, Body: { id: number } }>) => {
+        return await deleteRow(redis, taskId, id)
+    })
+
+    server.put('/task/:taskId/rows/:rowId', async ({ params: { taskId, rowId }, body }: FastifyRequest<{ Params: { taskId: string, rowId: string }, Body: TaskRowChangesPayload }>) => {
+        return await updateRow(redis, taskId, rowId, body)
+    })
+
+    server.get('/tempnames', async () => {
+        return getTempnames(redis)
+    })
+
+    server.listen({ port: 3001 })
+}
+
+start()
