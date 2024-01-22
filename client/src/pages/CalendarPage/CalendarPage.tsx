@@ -10,17 +10,18 @@ import { useEffect } from "react";
 import Button from 'components/Button'
 
 import styles from './CalendarPage.module.scss'
+import {addTaskAsync, fetchCalendarData} from "./CalendarPageThunks";
 
 const CalendarPage = () => {
     const data = useSelector((state: RootState) => state.calendar.data)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(setData(CalendarService.getData()))
+        dispatch(fetchCalendarData())
     }, [dispatch])
 
     const onAddCard = () => {
-        dispatch(addCard(CalendarService.addTask()))
+        dispatch(addTaskAsync())
     }
 
     return (

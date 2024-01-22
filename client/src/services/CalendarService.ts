@@ -1,80 +1,20 @@
 import { CalendarDataItem } from "types/CalendarTypes";
-import moment from "moment";
-import {TaskType} from "../types/TaskTypes";
-import {TaskService} from "./TaskService";
+import axios from 'axios'
 
 export default class CalendarService {
-    static getData(): CalendarDataItem[] {
-        const data = localStorage.getItem('calendar-data')
-
-        if (data) {
-            return JSON.parse(data)
-        }
-
-        return []
+    static async getData(): Promise<CalendarDataItem[]> {
+        const { data } = await axios.get(`${process.env.REACT_APP_MAIN_URL}/calendar`)
+        return data
     }
 
-    static addTask(): CalendarDataItem {
-        const id = new Date().getTime()
-        const date = moment().format('yyyy-MM-DD')
-
-        const newKalendarTask: CalendarDataItem = {
-            id,
-            rowsCount: 0,
-            time: '',
-            date,
-        }
-
-        const data = [
-            ...this.getData(),
-            newKalendarTask
-        ]
-
-        localStorage.setItem('calendar-data', JSON.stringify(data))
-
-        const tasksData = localStorage.getItem('task-data')
-
-        const newTask = {
-            date,
-            id: id,
-            rows: [],
-            totalTime: ''
-        }
-
-        if (tasksData) {
-            const data = JSON.parse(tasksData) as TaskType[]
-
-            data.push(newTask)
-
-            localStorage.setItem('task-data', JSON.stringify(data))
-        } else {
-            localStorage.setItem('task-data', JSON.stringify([newTask]))
-        }
-
-        return newKalendarTask
+    static async addTask(): Promise<CalendarDataItem> {
+        const { data } = await axios.post(`${process.env.REACT_APP_MAIN_URL}/calendar`)
+        return data
     }
 
-    static deleteTask(taskId: number): number | void {
-        const data = this.getData()
+    static async deleteTask(taskId: number): Promise<number> {
+        const { data } = await axios.delete(`${process.env.REACT_APP_MAIN_URL}/calendar`, { data: { id: taskId } })
 
-        const targetKalendarItemIndex = data.findIndex(({ id }) => id === taskId)
-
-        if (targetKalendarItemIndex !== -1) {
-            const updatedData = data.filter(({ id }) => id !== taskId)
-
-            localStorage.setItem('calendar-data', JSON.stringify(updatedData))
-        }
-
-        const tasksData = TaskService.getTasksData()
-
-        const targetTaskIndex = tasksData.findIndex(({ id }) => id === taskId)
-
-        if (targetTaskIndex) {
-            const updatedData = tasksData.filter(({ id }) => id !== taskId)
-
-            localStorage.setItem('task-data', JSON.stringify(updatedData))
-        }
-
-        return taskId
+        return data
     }
 }

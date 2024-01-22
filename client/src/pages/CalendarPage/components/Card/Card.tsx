@@ -9,7 +9,7 @@ import CalendarService from "services/CalendarService";
 import {useAppDispatch} from "store";
 
 import moment from 'moment'
-
+import { deleteTaskAsync } from '../../CalendarPageThunks'
 import { deleteCard } from '../../CalendarPageSlice'
 
 const Card: FC<CalendarDataItem> = ({ date, time, rowsCount, id }) => {
@@ -20,13 +20,13 @@ const Card: FC<CalendarDataItem> = ({ date, time, rowsCount, id }) => {
         navigate(`/task/${id}`)
     }
 
-    const onDeleteTask: MouseEventHandler<HTMLButtonElement> = (event) => {
+    const onDeleteTask: MouseEventHandler<HTMLButtonElement> = async (event) => {
         event.stopPropagation()
 
-        const targetId = CalendarService.deleteTask(id)
+        const targetId = await CalendarService.deleteTask(id)
 
         if (targetId) {
-            dispatch(deleteCard(targetId))
+            dispatch(deleteTaskAsync(targetId))
         }
     }
 
