@@ -1,1 +1,1 @@
-export {default} from './TaskLayout'
+export { default } from './TaskLayout'

@@ -1,2 +1,2 @@
-export {default} from './DropdownList'
+export { default } from './DropdownList'
 export { type DropdownListItemType } from './components/types'

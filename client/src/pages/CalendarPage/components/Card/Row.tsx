@@ -1,28 +1,28 @@
-import { FC, useState, ChangeEventHandler } from 'react'
-import { RowType } from 'types/CalendarTypes'
+import { type FC, useState, type ChangeEventHandler } from 'react'
+import { type RowType } from 'types/CalendarTypes'
 
-const Row: FC<RowType & { date: string }> = ({ title, from, to, id, date }) => {
-    const [stateTitle, setStateTitle] = useState(title || '')
-    const [stateFrom, setStateFrom] = useState(from || '')
-    const [stateTo, setStateTo] = useState(to || '')
+const Row: FC<RowType & { date: string }> = ({ title, from, to }) => {
+  const [stateTitle, setStateTitle] = useState(title ?? '')
+  const [stateFrom, setStateFrom] = useState(from ?? '')
+  const [stateTo, setStateTo] = useState(to ?? '')
 
-    const onChangeTitleHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
-        setStateTitle(event.target.value)
-    }
+  const onChangeTitleHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setStateTitle(event.target.value)
+  }
 
-    const onChangeFromHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
-        setStateFrom(event.target.value)
-    }
+  const onChangeFromHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setStateFrom(event.target.value)
+  }
 
-    const onChangeToHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
-        setStateTo(event.target.value)
-    }
+  const onChangeToHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setStateTo(event.target.value)
+  }
 
-    const onRemoveHandler = () => {
-        // KalendarService.removeRow(date, id)
-    }
+  const onRemoveHandler = (): void => {
+    // KalendarService.removeRow(date, id)
+  }
 
-    return <div style={{ display: 'flex', overflow: 'hidden', gap: '10px' }}>
+  return <div style={{ display: 'flex', overflow: 'hidden', gap: '10px' }}>
         <input
             value={stateTitle}
             onChange={onChangeTitleHandler}

@@ -1,36 +1,30 @@
-import {FC, MouseEventHandler} from 'react'
-import { CalendarDataItem } from "types/CalendarTypes";
+import { type FC, type MouseEventHandler } from 'react'
+import { type CalendarDataItem } from 'types/CalendarTypes'
 
 import Button from 'components/Button'
 
 import styles from './Card.module.scss'
-import { useNavigate } from "react-router-dom";
-import CalendarService from "services/CalendarService";
-import {useAppDispatch} from "store";
+import { useNavigate } from 'react-router-dom'
+import { useAppDispatch } from 'store'
 
 import moment from 'moment'
 import { deleteTaskAsync } from '../../CalendarPageThunks'
-import { deleteCard } from '../../CalendarPageSlice'
 
 const Card: FC<CalendarDataItem> = ({ date, time, rowsCount, id }) => {
-    const dispatch = useAppDispatch()
-    const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
-    const onClickHandler = () => {
-        navigate(`/task/${id}`)
-    }
+  const onClickHandler = (): void => {
+    navigate(`/task/${id}`)
+  }
 
-    const onDeleteTask: MouseEventHandler<HTMLButtonElement> = async (event) => {
-        event.stopPropagation()
+  const onDeleteTask: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.stopPropagation()
 
-        const targetId = await CalendarService.deleteTask(id)
+    dispatch(deleteTaskAsync(id))
+  }
 
-        if (targetId) {
-            dispatch(deleteTaskAsync(targetId))
-        }
-    }
-
-    return (
+  return (
         <div
             className={styles.card}
             onClick={onClickHandler}
@@ -39,7 +33,7 @@ const Card: FC<CalendarDataItem> = ({ date, time, rowsCount, id }) => {
                 <span>
                     {
                         moment(new Date(date))
-                            .format('DD MMMM yyyy')
+                          .format('DD MMMM yyyy')
                     }
                 </span>
 
@@ -58,7 +52,7 @@ const Card: FC<CalendarDataItem> = ({ date, time, rowsCount, id }) => {
                 </span>
             </div>
         </div>
-    )
+  )
 }
 
 export default Card

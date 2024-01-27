@@ -1,33 +1,29 @@
-import {TaskService} from "services/TaskService";
+import { type FC } from 'react'
 
 import Row from './components/Row'
 
 import styles from './TaskPage.module.scss'
-import {useSelector} from "react-redux";
+import { useSelector } from 'react-redux'
 
 import { selectTaskData } from './TaskPageSelectors'
-import { addRow } from './TaskPageSlice'
-import { useAppDispatch } from "store";
+import { useAppDispatch } from 'store'
+import { addTaskRowAsync } from './TaskPageThunks'
 
-const TaskPage = () => {
-    const dispatch = useAppDispatch()
-    const task = useSelector(selectTaskData)
+const TaskPage: FC = () => {
+  const dispatch = useAppDispatch()
+  const task = useSelector(selectTaskData)
 
-    if (!task) {
-        return null
-    }
+  if (task === null) {
+    return null
+  }
 
-    const { id, date, rows, totalTime } = task
+  const { id, rows } = task
 
-    const onRowAdd = async () => {
-        const newRow = await TaskService.addRow(id)
+  const onRowAdd = (): void => {
+    dispatch(addTaskRowAsync(id))
+  }
 
-        if (newRow) {
-            dispatch(addRow(newRow))
-        }
-    }
-
-    return (
+  return (
         <div className={styles.container}>
             <div className={styles.rowsContainer}>
                 {
@@ -44,7 +40,7 @@ const TaskPage = () => {
                 +
             </button>
         </div>
-    )
+  )
 }
 
 export default TaskPage

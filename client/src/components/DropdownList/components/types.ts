@@ -1,4 +1,4 @@
-export type DropdownListItemType = {
-    id: number
-    label: string
+export interface DropdownListItemType {
+  id: number
+  label: string
 }

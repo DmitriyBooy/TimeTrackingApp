@@ -1,14 +1,14 @@
-export type TaskType = {
-    id: number
-    date: string
-    totalTime: string
-    rows: RowType[]
+export interface TaskType {
+  id: number
+  date: string
+  totalTime: string
+  rows: RowType[]
 }
 
-export type RowType = {
-    id: number
-    taskId: number
-    from: string | null
-    to: string | null
-    title: string
+export interface RowType {
+  id: number
+  taskId: number
+  from: string | null
+  to: string | null
+  title: string
 }

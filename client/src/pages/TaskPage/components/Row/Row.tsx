@@ -1,72 +1,54 @@
-import {FC, MouseEventHandler, useEffect, useRef, useState} from 'react'
-import { RowType } from 'types/TaskTypes'
-import {useAppDispatch} from 'store';
+import { type FC, type MouseEventHandler, useEffect, useRef, useState } from 'react'
+import { type RowType } from 'types/TaskTypes'
+import { useAppDispatch } from 'store'
 
-import { RowPayload } from '../../TaskPageTypes'
+import { type RowPayload } from '../../TaskPageTypes'
 
-import { updateRow, deleteRow } from '../../TaskPageSlice'
-import { TaskService } from 'services/TaskService';
-
-import Button from 'components/Button';
-import Input from 'components/Input';
+import Button from 'components/Button'
+import Input from 'components/Input'
 import TimeInput from 'components/TimeInput'
-import DropdownList, {DropdownListItemType} from 'components/DropdownList'
+import DropdownList, { type DropdownListItemType } from 'components/DropdownList'
 
 import { debounce } from 'lodash'
+import { deleteTaskRowAsync, updateTaskRowAsync } from '../../TaskPageThunks'
 
 type OnUpdateHandler = (key: keyof RowPayload) => (value: string) => void
 
 const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
-    const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 
-    const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
-    const nameInputRef = useRef<HTMLInputElement>(null)
+  const nameInputRef = useRef<HTMLInputElement>(null)
 
-    const [itemsList, setItemsList] = useState<DropdownListItemType[]>([])
+  const [itemsList, setItemsList] = useState<DropdownListItemType[]>([])
 
-    const onUpdateHandler: OnUpdateHandler = (key) => async (value) => {
-        const updatedRow = await TaskService.updateTaskRow({
-            rowId: id,
-            changes: {[key]: value},
-        }, taskId)
+  const onUpdateHandler: OnUpdateHandler = (key) => async (value) => {
+    dispatch(updateTaskRowAsync({ taskId, id, changes: { [key]: value } }))
+  }
 
-        if (updatedRow) {
-            dispatch(updateRow(updatedRow))
-        }
-    }
+  const onDeleteRow = (): void => {
+    dispatch(deleteTaskRowAsync({ id, taskId }))
+  }
 
-    const onDeleteRow = async () => {
-        const targetId = await TaskService.deleteRow(id, taskId)
+  const onNameInputClick: MouseEventHandler<HTMLInputElement> = debounce(() => {
+    setIsOpen(true)
+  }, 700)
 
-        if (targetId) {
-            dispatch(deleteRow(targetId))
-        }
-    }
+  const onItemClick = ({ label }: DropdownListItemType): void => {
+    onUpdateHandler('title')(label)
+  }
 
-    const onNameInputClick: MouseEventHandler<HTMLInputElement> = debounce(() => {
-        setIsOpen(true)
-    }, 700)
+  useEffect(() => {
+    setItemsList([])
+  }, [taskId])
 
-    const onItemClick = ({ label }: DropdownListItemType) => {
-        onUpdateHandler('title')(label)
-    }
-
-    useEffect(() => {
-        TaskService.getTempnamesNames().then((data) => {
-            setItemsList(data.map((key, index) => ({
-                label: key,
-                id: index,
-            })))
-        })
-    }, [taskId])
-
-    return (
+  return (
         <div style={{ display: 'flex', gap: '20px' }}>
             <Input
                 value={title}
                 onClick={onNameInputClick}
-                onChange={() => setIsOpen(false)}
+                onChange={() => { setIsOpen(false) }}
                 onBlur={onUpdateHandler('title')}
                 placeholder="Наименование"
                 ref={nameInputRef}
@@ -74,7 +56,7 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
 
             <DropdownList
                 isOpen={isOpen}
-                onClose={() => setIsOpen(false)}
+                onClose={() => { setIsOpen(false) }}
                 anchor={nameInputRef}
                 onItemClick={onItemClick}
                 items={itemsList}
@@ -98,7 +80,7 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
 
             <Button onClick={onDeleteRow}>Удалить запись</Button>
         </div>
-    )
+  )
 }
 
 export default Row

@@ -2,13 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import calendar from 'pages/CalendarPage/CalendarPageSlice'
 import task from './pages/TaskPage/TaskPageSlice'
-import {useDispatch} from "react-redux";
+import { useDispatch } from 'react-redux'
 
 const rootState = configureStore({
-    reducer: {
-        calendar,
-        task,
-    }
+  reducer: {
+    calendar,
+    task
+  }
 })
 
 export default rootState

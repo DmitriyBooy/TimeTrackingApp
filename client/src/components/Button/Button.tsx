@@ -1,19 +1,19 @@
-import {MouseEventHandler, ReactNode, forwardRef} from "react";
+import { type MouseEventHandler, type ReactNode, forwardRef } from 'react'
 
 import styles from './Button.module.scss'
 
-type ButtonProps = {
-    children: ReactNode
-    className?: string
-    onClick: MouseEventHandler<HTMLButtonElement>
+interface ButtonProps {
+  children: ReactNode
+  className?: string
+  onClick: MouseEventHandler<HTMLButtonElement>
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
-                                                               children,
-                                                               onClick,
-                                                               className,
-                                                           }, ref) => {
-    return (
+  children,
+  onClick,
+  className
+}, ref) => {
+  return (
         <button
             onClick={onClick}
             className={`${styles.button} ${className}`}
@@ -27,7 +27,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
                 {children}
             </div>
         </button>
-    )
+  )
 })
 
 export default Button

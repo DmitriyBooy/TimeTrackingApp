@@ -1,43 +1,39 @@
-import {Outlet, useNavigate, useParams} from 'react-router-dom'
-import Button from "../../components/Button";
+import { type FC } from 'react'
+import { Outlet, useNavigate, useParams } from 'react-router-dom'
+import Button from '../../components/Button'
 import styles from './TaskLayout.module.scss'
-import {useSelector} from "react-redux";
-import {selectTaskData} from "../../pages/TaskPage/TaskPageSelectors";
-import {useEffect} from "react";
-import {setData} from "../../pages/TaskPage/TaskPageSlice";
-import {TaskService} from "../../services/TaskService";
-import {useAppDispatch} from "../../store";
-import moment from "moment";
+import { useSelector } from 'react-redux'
+import { selectTaskData } from '../../pages/TaskPage/TaskPageSelectors'
+import { useEffect } from 'react'
+import { getTaskAsync } from '../../pages/TaskPage/TaskPageThunks'
+import { useAppDispatch } from '../../store'
+import moment from 'moment'
 
-const TaskLayout = () => {
-    const dispatch = useAppDispatch()
+const TaskLayout: FC = () => {
+  const dispatch = useAppDispatch()
 
-    const navigate = useNavigate()
-    const task = useSelector(selectTaskData)
+  const navigate = useNavigate()
+  const task = useSelector(selectTaskData)
 
-    const { taskId } = useParams<{ taskId: string }>()
+  const { taskId } = useParams<{ taskId: string }>()
 
-    useEffect(() => {
-        if (taskId) {
-            TaskService.getTask(+taskId).then((task) => {
-                dispatch(setData(task))
-            })
-        }
-    }, [taskId])
-
-    if (!task) {
-        return null
+  useEffect(() => {
+    if (taskId !== undefined) {
+      dispatch(getTaskAsync(+taskId))
     }
+  }, [taskId])
 
-    const toKalendar = () => {
-        navigate('/')
-    }
+  if (task === null) {
+    return null
+  }
 
-    const taskDate = task
-    ? moment(new Date(task.date)).format('DD MMMM yyyy')
-        : ''
+  const toKalendar = (): void => {
+    navigate('/')
+  }
 
-    return (
+  const taskDate = moment(new Date(task.date)).format('DD MMMM yyyy')
+
+  return (
         <div className={styles.container}>
             <div className={styles.header}>
                 <Button
@@ -56,7 +52,7 @@ const TaskLayout = () => {
 
             <Outlet />
         </div>
-    )
+  )
 }
 
 export default TaskLayout

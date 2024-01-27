@@ -1,30 +1,28 @@
+import { type FC } from 'react'
 import Card from './components/Card'
-import {useSelector} from "react-redux";
-import {RootState, useAppDispatch} from '../../store'
+import { useSelector } from 'react-redux'
+import { type RootState, useAppDispatch } from '../../store'
 
-import { addCard, setData } from './CalendarPageSlice'
-import CalendarService from "services/CalendarService";
-import { useEffect } from "react";
-
+import { useEffect } from 'react'
 
 import Button from 'components/Button'
 
 import styles from './CalendarPage.module.scss'
-import {addTaskAsync, fetchCalendarData} from "./CalendarPageThunks";
+import { addTaskAsync, fetchCalendarData } from './CalendarPageThunks'
 
-const CalendarPage = () => {
-    const data = useSelector((state: RootState) => state.calendar.data)
-    const dispatch = useAppDispatch()
+const CalendarPage: FC = () => {
+  const data = useSelector((state: RootState) => state.calendar.data)
+  const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        dispatch(fetchCalendarData())
-    }, [dispatch])
+  useEffect(() => {
+    dispatch(fetchCalendarData())
+  }, [dispatch])
 
-    const onAddCard = () => {
-        dispatch(addTaskAsync())
-    }
+  const onAddCard = (): void => {
+    dispatch(addTaskAsync())
+  }
 
-    return (
+  return (
         <div className={styles.container}>
             <div className={styles.header}>
                 KalendarPage
@@ -42,7 +40,7 @@ const CalendarPage = () => {
                 }
             </div>
         </div>
-    )
+  )
 }
 
 export default CalendarPage

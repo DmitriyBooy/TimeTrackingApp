@@ -1,31 +1,30 @@
-import {FC, RefObject} from "react";
+import { type FC, type RefObject } from 'react'
 
 import Dropdown from '../Dropdown'
 import DropdownListItem from './components/DropdownListItem'
-import { DropdownListItemType } from './components/types'
+import { type DropdownListItemType } from './components/types'
 
-
-type DropdownListProps = {
-    anchor: RefObject<HTMLElement>
-    isOpen: boolean
-    onClose: () => void
-    items: DropdownListItemType[]
-    onItemClick: (item: DropdownListItemType) => void
+interface DropdownListProps {
+  anchor: RefObject<HTMLElement>
+  isOpen: boolean
+  onClose: () => void
+  items: DropdownListItemType[]
+  onItemClick: (item: DropdownListItemType) => void
 }
 
 const DropdownList: FC<DropdownListProps> = ({
-    anchor,
-    isOpen,
-    onClose,
-    items,
-    onItemClick
+  anchor,
+  isOpen,
+  onClose,
+  items,
+  onItemClick
 }) => {
-    const onItemClickHandler = (item: DropdownListItemType) => {
-        onItemClick(item)
-        onClose()
-    }
+  const onItemClickHandler = (item: DropdownListItemType): void => {
+    onItemClick(item)
+    onClose()
+  }
 
-    return (
+  return (
         <Dropdown
             isOpen={isOpen}
             onClose={onClose}
@@ -43,7 +42,7 @@ const DropdownList: FC<DropdownListProps> = ({
                 }
             </div>
         </Dropdown>
-    )
+  )
 }
 
 export default DropdownList

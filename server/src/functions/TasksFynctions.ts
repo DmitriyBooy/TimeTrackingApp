@@ -59,13 +59,13 @@ export const deleteRow = async (redis: Redis, taskId: string, rowId: number): Pr
     throw('Delete row error')
 }
 
-export const updateRow = async (redis: Redis, taskId: string, rowId: string, changes: TaskRowChangesPayload): Promise<any> => {
+export const updateRow = async (redis: Redis, taskId: string, { rowId, changes }: {rowId: number, changes: TaskRowChangesPayload}): Promise<any> => {
     const taskData = await redis.hget('tasks', taskId)
 
     if (taskData) {
         const task: Task = JSON.parse(taskData)
 
-        const targetRowIndex = task.rows.findIndex(({ id }) => id === Number(rowId))
+        const targetRowIndex = task.rows.findIndex(({ id }) => id === rowId)
 
         if (targetRowIndex !== -1) {
             const newRow = {

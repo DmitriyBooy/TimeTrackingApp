@@ -1,26 +1,26 @@
-import {ChangeEventHandler, FC, useState} from "react";
+import { type ChangeEventHandler, type FC, useState } from 'react'
 
 import styles from './TimeInput.module.scss'
 
-type TimeInputProps = {
-    value: string | null
-    onBlur: (value: string) => void
+interface TimeInputProps {
+  value: string | null
+  onBlur: (value: string) => void
 }
 
 const TimeInput: FC<TimeInputProps> = ({ value, onBlur }) => {
-    const [stateValue, setStateValue] = useState(value || '')
+  const [stateValue, setStateValue] = useState(value ?? '')
 
-    const onBlurHandler = () => {
-        onBlur(stateValue)
-    }
+  const onBlurHandler = (): void => {
+    onBlur(stateValue)
+  }
 
-    const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
-        const value = event.target.value
+  const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const value = event.target.value
 
-        setStateValue(value)
-    }
+    setStateValue(value)
+  }
 
-    return (
+  return (
         <input
             type="time"
             className={styles.input}
@@ -28,7 +28,7 @@ const TimeInput: FC<TimeInputProps> = ({ value, onBlur }) => {
             onChange={onChangeHandler}
             onBlur={onBlurHandler}
         />
-    )
+  )
 }
 
 export default TimeInput

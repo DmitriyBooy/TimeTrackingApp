@@ -1,3 +1,4 @@
-import {RootState} from "store";
+import { type RootState } from 'store'
+import { type TaskType } from '../../types/TaskTypes'
 
-export const selectTaskData = (state: RootState) => state.task.data
+export const selectTaskData = (state: RootState): TaskType | null => state.task.data

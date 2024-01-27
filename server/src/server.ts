@@ -39,8 +39,11 @@ const start = async () => {
         return await deleteRow(redis, taskId, id)
     })
 
-    server.put('/task/:taskId/rows/:rowId', async ({ params: { taskId, rowId }, body }: FastifyRequest<{ Params: { taskId: string, rowId: string }, Body: TaskRowChangesPayload }>) => {
-        return await updateRow(redis, taskId, rowId, body)
+    server.put('/task/:taskId/rows', async ({ params: { taskId }, body }: FastifyRequest<{ Params: { taskId: string }, Body: {
+            changes: TaskRowChangesPayload,
+            rowId: number
+        } }>) => {
+        return await updateRow(redis, taskId, body)
     })
 
     server.get('/tempnames', async () => {
