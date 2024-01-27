@@ -36,4 +36,10 @@ export class TaskService {
 
         return data
     }
+
+    static async getTempnamesNames(): Promise<string[]> {
+        const { data } = await axios.get(`${process.env.REACT_APP_MAIN_URL}/tempnames`)
+
+        return data
+    }
 }
