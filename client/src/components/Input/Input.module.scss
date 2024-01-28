@@ -1,17 +1,13 @@
 .input {
     font-size: 14px;
-    color: var(--theme-text-color);
-    background: rgba(var(--theme-secondary-bgc), 0.5);
+    color: white;
+    background: rgba(#3d3d3d, 0.5);
     padding: 4px;
     border: 1px solid transparent;
 
     &:focus {
         outline: none;
         border-radius: 4px;
-        border: 1px solid var(--theme-border-color-revert);
-    }
-
-    &::placeholder {
-        color: var(--theme-input-placeholder-color)
+        border: 1px solid #e5e5e5;
     }
 }

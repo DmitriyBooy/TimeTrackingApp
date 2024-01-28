@@ -4,23 +4,23 @@
   border-radius: 4px;
   border: none;
   overflow: hidden;
-  background-color: var(--theme-secondary-bgc);
+  background-color: #3d3d3d;
   transition: 0.3s;
 
   .prevContent {
     position: absolute;
     transform: translateX(-300%);
-    color: var(--theme-text-color-revert);
+    color: black;
     transition: 0.3s;
   }
 
   .content {
     transition: 0.3s;
-    color: var(--theme-text-color);
+    color: white;
   }
 
   &:hover {
-    background: var(--theme-secondary-bgc-revert);
+    //background: var(--theme-secondary-bgc-revert);
 
     .prevContent {
       transform: translateX(0);

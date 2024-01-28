@@ -1,0 +1,15 @@
+$border: 1px solid black;
+
+.tab {
+    text-decoration: none;
+    color: white;
+    background: none;
+    border: none;
+    font-size: 18px;
+}
+
+.isSelected {
+    border-top: $border;
+    border-left: $border;
+    border-right: $border;
+}
