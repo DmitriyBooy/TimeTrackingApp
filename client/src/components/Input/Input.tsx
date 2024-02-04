@@ -1,23 +1,15 @@
 import {
   type ChangeEventHandler,
   type FocusEventHandler,
+  type InputHTMLAttributes,
   useState,
-  type MouseEventHandler,
   forwardRef,
   useEffect
 } from 'react'
 
 import styles from './Input.module.scss'
 
-interface InputProps {
-  value: string | null
-  onBlur: (value: string) => void
-  placeholder?: string
-  onClick?: MouseEventHandler<HTMLInputElement>
-  onChange?: ChangeEventHandler<HTMLInputElement>
-}
-
-const Input = forwardRef<HTMLInputElement, InputProps>(({ value, onBlur, onClick, placeholder, onChange }, ref) => {
+const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(({ value, onBlur, onClick, placeholder, onChange }, ref) => {
   const [stateValue, setStateValue] = useState(value ?? '')
 
   const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -26,8 +18,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ value, onBlur, onClick
   }
 
   const onBlurHandler: FocusEventHandler<HTMLInputElement> = (event) => {
-    if (event.target.value !== value) {
-      onBlur(event.target.value)
+    if (onBlur && event.target.value !== value) {
+      onBlur(event)
     }
   }
 

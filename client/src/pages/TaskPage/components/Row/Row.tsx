@@ -1,8 +1,6 @@
-import { type FC, type MouseEventHandler, useEffect, useRef, useState } from 'react'
+import { type ChangeEventHandler, type FC, type MouseEventHandler, useEffect, useRef, useState } from 'react'
 import { type RowType } from 'types/TaskTypes'
 import { useAppDispatch } from 'store'
-
-import { type RowPayload } from '../../TaskPageTypes'
 
 import Button from 'components/Button'
 import Input from 'components/Input'
@@ -14,9 +12,8 @@ import { deleteTaskRowAsync, updateTaskRowAsync } from '../../TaskPageThunks'
 import { apiGet } from '../../../../Api'
 import { type TempnameType } from '../../../../types/TempnamesTypes'
 
-import styles from './Row.module.css'
-
-type OnUpdateHandler = (key: keyof RowPayload) => (value: string) => void
+import styles from './Row.module.scss'
+import { type RowPayload } from '../../TaskPageTypes'
 
 const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
   const dispatch = useAppDispatch()
@@ -27,7 +24,11 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
 
   const [itemsList, setItemsList] = useState<DropdownListItemType[]>([])
 
-  const onUpdateHandler: OnUpdateHandler = (key) => async (value) => {
+  const onUpdateInputHandler = (key: keyof RowPayload): ChangeEventHandler<HTMLInputElement> => (event) => {
+    dispatch(updateTaskRowAsync({ taskId, id, changes: { [key]: event.target.value } }))
+  }
+
+  const onTimeUpdate = (key: keyof RowPayload) => (value: string) => {
     dispatch(updateTaskRowAsync({ taskId, id, changes: { [key]: value } }))
   }
 
@@ -67,9 +68,10 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
                 value={title}
                 onClick={onNameInputClick}
                 onChange={onDropdownClose}
-                onBlur={onUpdateHandler('title')}
+                onBlur={onUpdateInputHandler('title')}
                 placeholder="Наименование"
                 ref={nameInputRef}
+                className={styles.nameInput}
             />
 
             <DropdownList
@@ -84,7 +86,7 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
                 С
                 <TimeInput
                     value={from}
-                    onBlur={onUpdateHandler('from')}
+                    onBlur={onTimeUpdate('from')}
                 />
             </div>
 
@@ -92,7 +94,7 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
                 По
                 <TimeInput
                     value={to}
-                    onBlur={onUpdateHandler('to')}
+                    onBlur={onTimeUpdate('to')}
                 />
             </div>
 

@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState } from 'react'
+import { type ChangeEventHandler, type FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectTempnames } from './TempnamesSelectors'
 import { useAppDispatch } from '../../../../store'
@@ -32,7 +32,9 @@ const TempnamesPage: FC = () => {
   }
 
   const TempnamesList = tempnames.map(({ id, name }) => {
-    const onTempnameUpdate = (value: string): void => {
+    const onTempnameUpdate: ChangeEventHandler<HTMLInputElement> = (event): void => {
+      const value = event.target.value
+
       if (value !== '') {
         dispatch(updateTempnameAsync({ id, name: value }))
       }
@@ -56,12 +58,16 @@ const TempnamesPage: FC = () => {
     )
   })
 
+  const onBlur: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setNewTempnate(event.target.value)
+  }
+
   return (
       <>
         <div className={styles.newTempnameConteiner}>
           <Input
               value={newTempnate}
-              onBlur={setNewTempnate}
+              onBlur={onBlur}
               placeholder="Название"
           />
 
