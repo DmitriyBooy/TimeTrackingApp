@@ -82,7 +82,7 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
                 items={itemsList}
             />
 
-            <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+            <div className={styles.timeInput}>
                 С
                 <TimeInput
                     value={from}
@@ -90,7 +90,7 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
                 />
             </div>
 
-            <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+            <div className={styles.timeInput}>
                 По
                 <TimeInput
                     value={to}

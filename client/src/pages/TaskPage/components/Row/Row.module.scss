@@ -5,4 +5,10 @@
     .nameInput {
         flex-grow: 1;
     }
+
+    .timeInput {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+    }
 }
