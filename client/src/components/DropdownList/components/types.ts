@@ -1,4 +1,4 @@
 export interface DropdownListItemType {
-  id: number
+  id: number | string
   label: string
 }

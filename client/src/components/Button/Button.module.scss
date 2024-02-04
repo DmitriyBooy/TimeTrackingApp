@@ -7,13 +7,6 @@
   background-color: #3d3d3d;
   transition: 0.3s;
 
-  .prevContent {
-    position: absolute;
-    transform: translateX(-300%);
-    color: black;
-    transition: 0.3s;
-  }
-
   .content {
     transition: 0.3s;
     color: white;
@@ -22,12 +15,8 @@
   &:hover {
     background: white;
 
-    .prevContent {
-      transform: translateX(0);
-    }
-
     .content {
-      transform: translateX(300%);
+      color: black;
     }
   }
 }

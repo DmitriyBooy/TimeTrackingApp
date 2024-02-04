@@ -1,6 +1,5 @@
 import { type FC } from 'react'
-import { Outlet, useNavigate, useParams } from 'react-router-dom'
-import Button from '../../components/Button'
+import { Outlet, useParams } from 'react-router-dom'
 import styles from './TaskLayout.module.scss'
 import { useSelector } from 'react-redux'
 import { selectTaskData } from '../../pages/TaskPage/TaskPageSelectors'
@@ -12,7 +11,6 @@ import moment from 'moment'
 const TaskLayout: FC = () => {
   const dispatch = useAppDispatch()
 
-  const navigate = useNavigate()
   const task = useSelector(selectTaskData)
 
   const { taskId } = useParams<{ taskId: string }>()
@@ -27,24 +25,11 @@ const TaskLayout: FC = () => {
     return null
   }
 
-  const toKalendar = (): void => {
-    navigate('/')
-  }
-
   const taskDate = moment(new Date(task.date)).format('DD MMMM yyyy')
 
   return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <Button
-                    onClick={toKalendar}
-                    className={styles.backButton}
-                >
-                    <span className={styles.text}>
-                        &#8592; К календарю
-                    </span>
-                </Button>
-
                 <span className={styles.taskDate}>
                     {taskDate}
                 </span>
