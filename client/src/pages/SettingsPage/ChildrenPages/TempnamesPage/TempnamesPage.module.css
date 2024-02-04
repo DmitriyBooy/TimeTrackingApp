@@ -1,0 +1,17 @@
+.tempnamesContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+}
+
+.newTempnameConteiner {
+    display: flex;
+    gap: 15px;
+    padding: 10px;
+}
+
+.tempnameItem {
+    display: flex;
+    gap: 15px
+}
