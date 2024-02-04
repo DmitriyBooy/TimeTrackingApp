@@ -1,15 +1,30 @@
-$border: 1px solid black;
+$border: 1px solid #bebebe;
 
 .tab {
     text-decoration: none;
-    color: white;
     background: none;
     border: none;
     font-size: 18px;
+
+    transition: all 0.1s;
+
+    &_unselect {
+        color: #c5c5c5;
+
+        &:hover {
+            color: white;
+            transform: scale(1.1) translateY(-3px);
+        }
+    }
 }
 
 .isSelected {
+    color: white;
     border-top: $border;
     border-left: $border;
     border-right: $border;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+
+    box-shadow: 2px 0 2px black;
 }

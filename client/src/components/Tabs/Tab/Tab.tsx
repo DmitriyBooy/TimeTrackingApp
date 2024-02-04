@@ -30,7 +30,7 @@ const Tab: FC<TabProps> = ({ pathname, name, id }) => {
   }
 
   return (
-      <button onClick={onClick} className={`${styles.tab} ${isSelected ? styles.isSelected : ''}`}>
+      <button onClick={onClick} className={`${styles.tab} ${isSelected ? styles.isSelected : styles.tab_unselect}`}>
         { name }
       </button>
   )

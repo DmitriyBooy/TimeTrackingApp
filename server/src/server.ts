@@ -6,7 +6,7 @@ import { deleteCalendarItem, getCalendar, setCalendarItem } from './functions/Ca
 import { getTask, addRow, deleteRow, updateRow } from './functions/TasksFynctions'
 
 import { TaskRowChangesPayload } from './models/TaskRow'
-import {getTempnames} from "./functions/TempnamesFynctions";
+import { deleteTempname, getTempnames, setTempname } from "./functions/TempnamesFynctions";
 
 const server = fastify({
     logger: true,
@@ -41,13 +41,21 @@ const start = async () => {
 
     server.put('/task/:taskId/rows', async ({ params: { taskId }, body }: FastifyRequest<{ Params: { taskId: string }, Body: {
             changes: TaskRowChangesPayload,
-            rowId: number
+            id: number
         } }>) => {
         return await updateRow(redis, taskId, body)
     })
 
     server.get('/tempnames', async () => {
         return getTempnames(redis)
+    })
+
+    server.post('/tempnames', async ({ body }: FastifyRequest<{ Body: { name: string } }>) => {
+        return setTempname(redis, body.name)
+    })
+
+    server.delete('/tempnames', async ({ body }: FastifyRequest<{ Body: { id: number } }>) => {
+        return deleteTempname(redis, body.id)
     })
 
     server.listen({ port: 3001 })

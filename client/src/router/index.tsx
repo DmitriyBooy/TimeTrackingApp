@@ -32,10 +32,6 @@ export default createBrowserRouter([
           {
             path: '/settings/tempnames',
             Component: TempnamesPage
-          },
-          {
-            path: '/settings/other',
-            element: <div>other</div>
           }
         ]
       }
