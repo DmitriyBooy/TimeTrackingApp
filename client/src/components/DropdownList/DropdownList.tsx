@@ -3,6 +3,7 @@ import { type FC, type RefObject } from 'react'
 import Dropdown from '../Dropdown'
 import DropdownListItem from './components/DropdownListItem'
 import { type DropdownListItemType } from './components/types'
+import styles from './DropdownList.module.css'
 
 interface DropdownListProps {
   anchor: RefObject<HTMLElement>
@@ -30,7 +31,7 @@ const DropdownList: FC<DropdownListProps> = ({
             onClose={onClose}
             anchor={anchor}
         >
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className={styles.listContainer}>
                 {
                     items.map((item) =>
                         <DropdownListItem

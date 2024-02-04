@@ -9,8 +9,12 @@ import Input from 'components/Input'
 import TimeInput from 'components/TimeInput'
 import DropdownList, { type DropdownListItemType } from 'components/DropdownList'
 
-import { debounce } from 'lodash'
+import { debounce, type DebouncedFunc } from 'lodash'
 import { deleteTaskRowAsync, updateTaskRowAsync } from '../../TaskPageThunks'
+import { apiGet } from '../../../../Api'
+import { type TempnameType } from '../../../../types/TempnamesTypes'
+
+import styles from './Row.module.css'
 
 type OnUpdateHandler = (key: keyof RowPayload) => (value: string) => void
 
@@ -31,24 +35,38 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
     dispatch(deleteTaskRowAsync({ id, taskId }))
   }
 
-  const onNameInputClick: MouseEventHandler<HTMLInputElement> = debounce(() => {
-    setIsOpen(true)
+  const onNameInputClick: DebouncedFunc<MouseEventHandler<HTMLInputElement>> = debounce(() => {
+    apiGet<TempnameType[]>('/tempnames')
+      .then(({ data }) => {
+        setItemsList(data.map(({ name, id }) => ({
+          id,
+          label: name
+        })))
+      })
+      .finally(() => {
+        setIsOpen(true)
+      })
   }, 700)
 
   const onItemClick = ({ label }: DropdownListItemType): void => {
-    onUpdateHandler('title')(label)
+    dispatch(updateTaskRowAsync({ taskId, id, changes: { title: label } }))
   }
 
   useEffect(() => {
     setItemsList([])
   }, [taskId])
 
+  const onDropdownClose = (): void => {
+    onNameInputClick.cancel()
+    setIsOpen(false)
+  }
+
   return (
-        <div style={{ display: 'flex', gap: '20px' }}>
+        <div className={styles.row}>
             <Input
                 value={title}
                 onClick={onNameInputClick}
-                onChange={() => { setIsOpen(false) }}
+                onChange={onDropdownClose}
                 onBlur={onUpdateHandler('title')}
                 placeholder="Наименование"
                 ref={nameInputRef}
@@ -56,7 +74,7 @@ const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
 
             <DropdownList
                 isOpen={isOpen}
-                onClose={() => { setIsOpen(false) }}
+                onClose={onDropdownClose}
                 anchor={nameInputRef}
                 onItemClick={onItemClick}
                 items={itemsList}

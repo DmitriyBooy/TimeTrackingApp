@@ -13,19 +13,27 @@ export const getTempnames = async (redis: Redis) => {
         .reverse()
 }
 
-export const setTempname = async (redis: Redis, name: string) => {
-    const newTempname = { name, id: new Date().getTime() }
+export const setTempname = async (redis: Redis, tempname: string) => {
+    const tempnamesData = await redis.lrange('tempnames', 0, -1)
 
-    const tempnames = await redis.hgetall('test:tempnames')
+    if (tempnamesData) {
+        const tempnamesList: Tempname[] = tempnamesData.map((tempname) => JSON.parse(tempname))
 
-    await redis.rpush('tempnames', JSON.stringify(newTempname))
-    const length = await redis.llen('tempnames')
+        const isNewTempname = tempnamesList.every(({ name }) => name !== tempname)
 
-    if (length > 10) {
-        await redis.lpop('tempnames')
+        if (isNewTempname) {
+            const newTempname = { name: tempname, id: new Date().getTime() }
+
+            await redis.rpush('tempnames', JSON.stringify(newTempname))
+            const length = await redis.llen('tempnames')
+
+            if (length > 10) {
+                await redis.lpop('tempnames')
+            }
+
+            return newTempname
+        }
     }
-
-    return newTempname
 }
 
 export const updateTempname = async (redis: Redis, updatedTempname: Tempname) => {

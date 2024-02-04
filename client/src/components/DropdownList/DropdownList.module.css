@@ -1,0 +1,6 @@
+.listContainer {
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+    justify-content: center;
+}

@@ -1,4 +1,11 @@
-import { type ChangeEventHandler, type FocusEventHandler, useState, type MouseEventHandler, forwardRef } from 'react'
+import {
+  type ChangeEventHandler,
+  type FocusEventHandler,
+  useState,
+  type MouseEventHandler,
+  forwardRef,
+  useEffect
+} from 'react'
 
 import styles from './Input.module.scss'
 
@@ -23,6 +30,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ value, onBlur, onClick
       onBlur(event.target.value)
     }
   }
+
+  useEffect(() => {
+    setStateValue(value ?? '')
+  }, [value])
 
   return (
         <input
