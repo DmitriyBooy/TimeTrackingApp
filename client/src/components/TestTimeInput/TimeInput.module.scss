@@ -1,0 +1,26 @@
+.container {
+    position: relative;
+
+    .input {
+        font-size: 14px;
+        color: white;
+        background: rgba(#3d3d3d, 0.5);
+        padding: 4px;
+        border: 1px solid transparent;
+        width: 100%;
+
+        &:focus {
+            outline: none;
+            border-radius: 4px;
+            border: 1px solid #e5e5e5;
+        }
+    }
+
+    .icon {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        right: 5px;
+        top: 2px;
+    }
+}

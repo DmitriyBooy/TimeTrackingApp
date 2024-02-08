@@ -9,11 +9,19 @@ import router from './router'
 
 import { RouterProvider } from 'react-router-dom'
 
+import { ConfigProvider, theme } from 'antd'
+
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = ReactDOM.createRoot(document.getElementById('root')!)
 
 root.render(
+    <ConfigProvider
+        theme={{
+          algorithm: theme.darkAlgorithm
+        }}
+    >
       <Provider store={store}>
           <RouterProvider router={router} />
       </Provider>
+    </ConfigProvider>
 )

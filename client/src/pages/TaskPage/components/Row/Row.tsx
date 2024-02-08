@@ -1,104 +1,96 @@
-import { type ChangeEventHandler, type FC, type MouseEventHandler, useEffect, useRef, useState } from 'react'
+import { type ChangeEventHandler, type FC, useRef, useState } from 'react'
 import { type RowType } from 'types/TaskTypes'
 import { useAppDispatch } from 'store'
 
-import Button from 'components/Button'
+import { Button, TimePicker, type TimePickerProps } from 'antd'
+import { CloseOutlined } from '@ant-design/icons'
 import Input from 'components/Input'
-import TimeInput from 'components/TimeInput'
-import DropdownList, { type DropdownListItemType } from 'components/DropdownList'
 
-import { debounce, type DebouncedFunc } from 'lodash'
+import dayjs from 'dayjs'
+
 import { deleteTaskRowAsync, updateTaskRowAsync } from '../../TaskPageThunks'
-import { apiGet } from '../../../../Api'
-import { type TempnameType } from '../../../../types/TempnamesTypes'
-
 import styles from './Row.module.scss'
 import { type RowPayload } from '../../TaskPageTypes'
 
 const Row: FC<RowType> = ({ id, taskId, from, to, title }) => {
   const dispatch = useAppDispatch()
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [status, setStatus] = useState<TimePickerProps['status']>('')
 
   const nameInputRef = useRef<HTMLInputElement>(null)
 
-  const [itemsList, setItemsList] = useState<DropdownListItemType[]>([])
-
   const onUpdateInputHandler = (key: keyof RowPayload): ChangeEventHandler<HTMLInputElement> => (event) => {
     dispatch(updateTaskRowAsync({ taskId, id, changes: { [key]: event.target.value } }))
-  }
-
-  const onTimeUpdate = (key: keyof RowPayload) => (value: string) => {
-    dispatch(updateTaskRowAsync({ taskId, id, changes: { [key]: value } }))
   }
 
   const onDeleteRow = (): void => {
     dispatch(deleteTaskRowAsync({ id, taskId }))
   }
 
-  const onNameInputClick: DebouncedFunc<MouseEventHandler<HTMLInputElement>> = debounce(() => {
-    apiGet<TempnameType[]>('/tempnames')
-      .then(({ data }) => {
-        setItemsList(data.map(({ name, id }) => ({
-          id,
-          label: name
-        })))
-      })
-      .finally(() => {
-        setIsOpen(true)
-      })
-  }, 700)
+  const onFromChange: TimePickerProps['onChange'] = (time) => {
+    if (time === null) {
+      dispatch(updateTaskRowAsync({ taskId, id, changes: { from: null } }))
+      return
+    }
 
-  const onItemClick = ({ label }: DropdownListItemType): void => {
-    dispatch(updateTaskRowAsync({ taskId, id, changes: { title: label } }))
+    if (time?.isValid()) {
+      dispatch(updateTaskRowAsync({ taskId, id, changes: { from: dayjs(time).format('HH:mm') } }))
+    }
+    setStatus('')
   }
 
-  useEffect(() => {
-    setItemsList([])
-  }, [taskId])
+  const onToChange: TimePickerProps['onChange'] = (time) => {
+    if (time === null) {
+      dispatch(updateTaskRowAsync({ taskId, id, changes: { to: null } }))
+      return
+    }
 
-  const onDropdownClose = (): void => {
-    onNameInputClick.cancel()
-    setIsOpen(false)
+    if (time?.isValid()) {
+      const fromTest = dayjs(from)
+
+      if (time.isAfter(fromTest)) {
+        dispatch(updateTaskRowAsync({ taskId, id, changes: { to: dayjs(time).format('HH:mm') } }))
+      } else {
+        setStatus('error')
+      }
+    }
   }
 
   return (
         <div className={styles.row}>
             <Input
                 value={title}
-                onClick={onNameInputClick}
-                onChange={onDropdownClose}
                 onBlur={onUpdateInputHandler('title')}
                 placeholder="Наименование"
                 ref={nameInputRef}
                 className={styles.nameInput}
             />
 
-            <DropdownList
-                isOpen={isOpen}
-                onClose={onDropdownClose}
-                anchor={nameInputRef}
-                onItemClick={onItemClick}
-                items={itemsList}
-            />
+          <TimePicker
+              defaultValue={from ? dayjs(from, 'HH:mm') : null}
+              placeholder='С'
+              format="HH:mm"
+              onChange={onFromChange}
+              className={styles.timeInput}
+          />
 
-            <div className={styles.timeInput}>
-                С
-                <TimeInput
-                    value={from}
-                    onBlur={onTimeUpdate('from')}
-                />
-            </div>
+          <TimePicker
+              defaultValue={to ? dayjs(to, 'HH:mm') : null}
+              placeholder='По'
+              format="HH:mm"
+              onChange={onToChange}
+              status={status}
+              className={styles.timeInput}
+          />
 
-            <div className={styles.timeInput}>
-                По
-                <TimeInput
-                    value={to}
-                    onBlur={onTimeUpdate('to')}
-                />
-            </div>
-
-            <Button onClick={onDeleteRow}>Удалить запись</Button>
+          <Button
+              onClick={onDeleteRow}
+              type='primary'
+              danger
+              icon={<CloseOutlined />}
+          >
+            Удалить запись
+          </Button>
         </div>
   )
 }

@@ -1,7 +1,8 @@
-import { type FC, type MouseEventHandler } from 'react'
+import { type FC, type MouseEventHandler, type ReactNode } from 'react'
 import { type CalendarDataItem } from 'types/CalendarTypes'
 
-import Button from 'components/Button'
+import { Button, Card as AntCard } from 'antd'
+import { CloseOutlined, EditOutlined } from '@ant-design/icons'
 
 import styles from './Card.module.scss'
 import { useNavigate } from 'react-router-dom'
@@ -14,7 +15,7 @@ const Card: FC<CalendarDataItem> = ({ date, time, rowsCount, id }) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const onClickHandler = (): void => {
+  const onEditClick = (): void => {
     navigate(`/task/${id}`)
   }
 
@@ -24,24 +25,20 @@ const Card: FC<CalendarDataItem> = ({ date, time, rowsCount, id }) => {
     dispatch(deleteTaskAsync(id))
   }
 
+  const cardExtra: ReactNode = (
+      <Button onClick={onDeleteTask}>
+        <CloseOutlined />
+      </Button>
+  )
+
   return (
-        <div
-            className={styles.card}
-            onClick={onClickHandler}
+        <AntCard
+            title={moment(new Date(date)).format('DD MMMM yyyy')}
+            extra={cardExtra}
+            actions={[
+              <EditOutlined onClick={onEditClick} key="edit" />
+            ]}
         >
-            <div className={styles.header}>
-                <span>
-                    {
-                        moment(new Date(date))
-                          .format('DD MMMM yyyy')
-                    }
-                </span>
-
-                <Button onClick={onDeleteTask}>
-                    x
-                </Button>
-            </div>
-
             <div className={styles.card_info}>
                 <span>
                     {rowsCount}
@@ -51,7 +48,7 @@ const Card: FC<CalendarDataItem> = ({ date, time, rowsCount, id }) => {
                     {time}
                 </span>
             </div>
-        </div>
+        </AntCard>
   )
 }
 

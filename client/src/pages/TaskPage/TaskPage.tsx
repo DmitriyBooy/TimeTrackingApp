@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectTaskData } from './TaskPageSelectors'
 import { useAppDispatch } from 'store'
 import { addTaskRowAsync } from './TaskPageThunks'
-import Button from '../../components/Button'
+import { Button } from 'antd'
 
 const TaskPage: FC = () => {
   const dispatch = useAppDispatch()
@@ -37,7 +37,7 @@ const TaskPage: FC = () => {
                 }
             </div>
 
-            <Button style={{ padding: '5px' }} onClick={onRowAdd}>
+            <Button onClick={onRowAdd}>
                 + Добавить строку
             </Button>
         </div>

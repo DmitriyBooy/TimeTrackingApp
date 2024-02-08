@@ -4,7 +4,7 @@ import { selectTempnames } from './TempnamesSelectors'
 import { useAppDispatch } from '../../../../store'
 import { getTempnamesAsync, deleteTempnameAsync, updateTempnameAsync, addTempnateAsync } from './TempnamesThunks'
 import Input from 'components/Input'
-import Button from '../../../../components/Button'
+import { Button } from 'antd'
 
 import styles from './TempnamesPage.module.css'
 

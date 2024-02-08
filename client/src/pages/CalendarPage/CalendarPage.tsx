@@ -5,7 +5,7 @@ import { type RootState, useAppDispatch } from '../../store'
 
 import { useEffect } from 'react'
 
-import Button from 'components/Button'
+import { Button } from 'antd'
 
 import styles from './CalendarPage.module.scss'
 import { addTaskAsync, fetchCalendarData } from './CalendarPageThunks'

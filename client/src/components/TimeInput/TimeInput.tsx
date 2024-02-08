@@ -5,9 +5,10 @@ import styles from './TimeInput.module.scss'
 interface TimeInputProps {
   value: string | null
   onBlur: (value: string) => void
+  min?: string
 }
 
-const TimeInput: FC<TimeInputProps> = ({ value, onBlur }) => {
+const TimeInput: FC<TimeInputProps> = ({ value, onBlur, min }) => {
   const [stateValue, setStateValue] = useState(value ?? '')
 
   const onBlurHandler = (): void => {
@@ -27,6 +28,7 @@ const TimeInput: FC<TimeInputProps> = ({ value, onBlur }) => {
             value={stateValue}
             onChange={onChangeHandler}
             onBlur={onBlurHandler}
+            min={min}
         />
   )
 }

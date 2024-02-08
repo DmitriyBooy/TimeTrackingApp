@@ -1,10 +1,12 @@
 import { type FC } from 'react'
 
-import styles from './App.module.scss'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import SettingsButton from './components/SettingsButton'
-import Button from './components/Button'
+
+import { Layout, Button, Space } from 'antd'
+
+const { Header, Content } = Layout
 
 const App: FC = () => {
   const navigate = useNavigate()
@@ -15,21 +17,25 @@ const App: FC = () => {
   }
 
   return (
-        <div className={styles.container}>
-          <div className={styles.topBar}>
+      <Layout style={{ height: '100vh' }} >
+        <Header>
+          <Space>
             {
-              pathname !== '/' && (
+                pathname !== '/' && (
                     <Button onClick={onBack}>
-                      &#8592; Назад
+                      Назад
                     </Button>
-              )
+                )
             }
 
             <SettingsButton />
-          </div>
+          </Space>
+        </Header>
 
+        <Content>
           <Outlet/>
-        </div>
+        </Content>
+      </Layout>
   )
 }
 
